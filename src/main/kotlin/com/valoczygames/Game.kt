@@ -42,13 +42,7 @@ class Player(private val scanner: Scanner, val name: String, initialBallCount: I
     private fun readNumber(): Int {
         println("You currently have $ballCount balls.")
         try {
-            val n = String(System.console()?.readPassword() ?: "null".toCharArray())
-            val number = if (n == "null") {
-                scanner.nextInt()
-            } else {
-                Integer.parseInt(n)
-            }
-
+            val number = readSecretIntFromConsole()
             if (number < 1 || number > ballCount) {
                 println("$name! Number must be > 0 and <= $ballCount. Try again.")
                 return readNumber()
@@ -65,10 +59,20 @@ class Player(private val scanner: Scanner, val name: String, initialBallCount: I
         }
     }
 
+    private fun readSecretIntFromConsole(): Int {
+        val n = String(System.console()?.readPassword() ?: "null".toCharArray())
+        val number = if (n == "null") {
+            scanner.nextInt()
+        } else {
+            Integer.parseInt(n)
+        }
+        return number
+    }
+
     private fun guessParity(): Parity {
         try {
             println("$name! Guess the parity of the number that the other player is hiding.")
-            println("Enter 0 if even, 1 if odd.")
+            println("[0] even, [1] odd.")
             val number = scanner.nextInt()
             if (number != 0 && number != 1) {
                 println("$name! Number must be 0 or 1. Try again.")
@@ -91,10 +95,10 @@ class Game(initialBallCount: Int) {
     private var turn = 1
 
     init {
-        println("Specify name of player 1 and hit enter.")
+        println("Specify name of player1.")
         player1 = Player(scanner, scanner.nextLine(), initialBallCount)
         actualPlayer1 = player1
-        println("Specify name of player 2 and hit enter.")
+        println("Specify name of player2.")
         player2 = Player(scanner, scanner.nextLine(), initialBallCount)
         actualPlayer2 = player2
     }
